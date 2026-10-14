@@ -1,0 +1,730 @@
+<title>Our Tiny Corner</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=DM+Mono:wght@500&family=Figtree:wght@400;600;800&display=swap">
+<style>
+/* Layout: one scrolling page of chunky sticker-style cards, left-aligned type, each section a different toy. */
+:root {
+  --bg: #FFE6EE;
+  --surface: #FFF8FA;
+  --ink: #2B1740;
+  --muted: #6B5580;
+  --on-fill: #2B1740;
+  --pink: #FF4F81;
+  --yellow: #FFD23F;
+  --mint: #5EDBB5;
+  --blue: #86A2FF;
+  --shadow: #2B1740;
+  --display: "Bagel Fat One", "Arial Rounded MT Bold", "Trebuchet MS", sans-serif;
+  --body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "DM Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1C1030;
+    --surface: #2A1A45;
+    --ink: #FFE6EE;
+    --muted: #BCA8D6;
+    --pink: #FF6B96;
+    --blue: #8FA8FF;
+    --shadow: #0B0616;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1C1030;
+  --surface: #2A1A45;
+  --ink: #FFE6EE;
+  --muted: #BCA8D6;
+  --pink: #FF6B96;
+  --blue: #8FA8FF;
+  --shadow: #0B0616;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background-color: var(--bg);
+  background-image: radial-gradient(color-mix(in srgb, var(--ink) 16%, transparent) 1.5px, transparent 1.7px);
+  background-size: 24px 24px;
+  color: var(--ink);
+  font: 400 1rem/1.55 var(--body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 24px 56px;
+}
+main {
+  max-width: 980px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(56px, 9vw, 96px);
+}
+h1, h2, h3 { font-family: var(--display); font-weight: 400; margin: 0; text-wrap: balance; letter-spacing: 0.005em; }
+p { margin: 0; }
+button { font: inherit; color: inherit; }
+
+.mono { font-family: var(--mono); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.card {
+  background: var(--surface);
+  border: 3px solid var(--ink);
+  border-radius: 20px;
+  box-shadow: 6px 6px 0 var(--shadow);
+}
+
+/* buttons */
+.btn {
+  appearance: none;
+  cursor: pointer;
+  background: var(--pink);
+  color: var(--on-fill);
+  border: 3px solid var(--ink);
+  border-radius: 999px;
+  padding: 0.65em 1.3em;
+  font-weight: 800;
+  font-size: 1rem;
+  box-shadow: 4px 4px 0 var(--shadow);
+  transition: transform 0.12s, box-shadow 0.12s;
+}
+.btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--shadow); }
+.btn:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--shadow); }
+.btn:disabled { opacity: 0.6; cursor: default; transform: none; box-shadow: 4px 4px 0 var(--shadow); }
+.btn.alt { background: var(--yellow); }
+.btn.ghost { background: var(--surface); color: var(--ink); }
+button:focus-visible, a:focus-visible, canvas:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+
+/* section heads */
+.sec-head { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 24px; }
+.pill {
+  display: inline-block;
+  background: var(--yellow);
+  color: var(--on-fill);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 2px 12px;
+}
+.sec-head h2 { font-size: clamp(1.9rem, 5.5vw, 3rem); line-height: 1.02; max-width: 16ch; }
+.sec-head p { color: var(--muted); max-width: 52ch; }
+
+/* hero */
+.hero { position: relative; display: flex; flex-direction: column; gap: 22px; padding-top: 12px; }
+.hero h1 { font-size: clamp(2.8rem, 10vw, 6rem); line-height: 0.98; }
+.hero .name {
+  display: inline-block;
+  background: var(--pink);
+  color: var(--on-fill);
+  border: 3px solid var(--ink);
+  border-radius: 0.22em;
+  padding: 0 0.14em;
+  transform: rotate(-2.5deg);
+  box-shadow: 5px 5px 0 var(--shadow);
+}
+.hero .lede { font-size: 1.15rem; max-width: 40ch; color: var(--muted); }
+.counter { padding: 18px; display: flex; flex-direction: column; gap: 14px; max-width: 640px; }
+.counter .mono { color: var(--muted); }
+.tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.tile {
+  background: var(--c);
+  color: var(--on-fill);
+  border: 3px solid var(--ink);
+  border-radius: 14px;
+  padding: 10px 6px 8px;
+  text-align: center;
+}
+.tile b { display: block; font-family: var(--display); font-weight: 400; font-size: clamp(1.7rem, 7vw, 3rem); line-height: 1.05; font-variant-numeric: tabular-nums; }
+.tile span { font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.next-ann { font-weight: 600; }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip {
+  color: var(--ink);
+  text-decoration: none;
+  font-weight: 800;
+  background: var(--surface);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 6px 14px;
+  transition: background 0.12s, transform 0.12s;
+}
+.chip:hover { background: var(--mint); color: var(--on-fill); transform: rotate(-2deg); }
+.float-heart {
+  position: absolute;
+  pointer-events: none;
+  font-size: 1.8rem;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+  animation: floatUp 1.6s ease-out forwards;
+}
+@keyframes floatUp {
+  0% { opacity: 1; transform: translate(-50%, -50%) scale(0.6); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--dx, 0px)), -260%) scale(1.5); }
+}
+
+/* the question */
+.arena {
+  position: relative;
+  min-height: 240px;
+  display: flex;
+  align-items: center;
+  padding: 24px;
+  border: 3px dashed var(--ink);
+  border-radius: 24px;
+  background: var(--surface);
+  overflow: hidden;
+}
+#yes { transform: scale(var(--ys, 1)); transform-origin: left center; transition: transform 0.25s; background: var(--mint); font-size: 1.15rem; }
+#yes:hover { transform: scale(var(--ys, 1)) translate(-2px, -2px); }
+#no { position: absolute; transform: scale(var(--ns, 1)); background: var(--surface); transition: left 0.25s cubic-bezier(0.3, 1.5, 0.5, 1), top 0.25s cubic-bezier(0.3, 1.5, 0.5, 1), transform 0.25s; }
+#no:hover { transform: scale(var(--ns, 1)); }
+.ask-done { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; padding: 26px; background: var(--yellow); color: var(--on-fill); }
+.ask-done h3 { font-size: clamp(1.6rem, 5vw, 2.4rem); line-height: 1.05; }
+.ask-done .btn { background: var(--surface); }
+
+.linklike { background: none; border: 0; padding: 0; cursor: pointer; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; font-weight: 600; }
+
+/* wheel */
+.wheel-wrap { display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr); gap: 32px; align-items: center; }
+.wheel-stage { position: relative; width: 100%; max-width: 360px; }
+#wheel { width: 100%; height: auto; display: block; aspect-ratio: 1; }
+.pointer { position: absolute; left: 50%; top: -14px; width: 40px; height: 44px; transform: translateX(-50%); transform-origin: 50% 15%; z-index: 2; }
+#wheel { cursor: pointer; }
+.wheel-side { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; min-width: 0; }
+.wheel-out { padding: 18px; min-height: 104px; width: 100%; }
+.wheel-out h3 { font-size: 1.7rem; line-height: 1.1; }
+.wheel-out p { color: var(--muted); margin-top: 6px; }
+
+/* quiz */
+.quiz { padding: 24px; display: flex; flex-direction: column; gap: 16px; max-width: 680px; }
+.quiz h3 { font-size: clamp(1.4rem, 4.4vw, 2rem); line-height: 1.12; }
+.quiz .mono { color: var(--muted); }
+.opts { display: flex; flex-direction: column; gap: 10px; }
+.opt {
+  appearance: none;
+  cursor: pointer;
+  text-align: left;
+  background: var(--surface);
+  color: var(--ink);
+  border: 3px solid var(--ink);
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-weight: 600;
+  box-shadow: 3px 3px 0 var(--shadow);
+  transition: transform 0.12s, background 0.12s;
+}
+.opt:hover:not(:disabled) { background: var(--yellow); color: var(--on-fill); transform: translate(-2px, -2px); }
+.opt:disabled { cursor: default; opacity: 0.6; }
+.opt.right { background: var(--mint); color: var(--on-fill); opacity: 1; }
+.opt.wrong { background: var(--pink); color: var(--on-fill); opacity: 1; }
+.feedback { font-weight: 800; min-height: 1.5em; }
+.score-big { font-family: var(--display); font-size: clamp(3rem, 12vw, 5rem); line-height: 1; }
+
+/* scratch */
+.scratch-wrap { max-width: 640px; display: flex; flex-direction: column; gap: 16px; align-items: flex-start; width: 100%; }
+.scratch-box {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  border: 3px solid var(--ink);
+  border-radius: 20px;
+  box-shadow: 6px 6px 0 var(--shadow);
+  background: var(--surface);
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  text-align: center;
+}
+.scratch-box h3 { font-size: clamp(1.4rem, 4.6vw, 2.1rem); line-height: 1.12; }
+#scratch { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: crosshair; transition: opacity 0.6s; }
+#scratch.gone { opacity: 0; pointer-events: none; }
+.scratch-actions { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+
+footer { text-align: left; color: var(--muted); font-weight: 600; }
+footer b { color: var(--pink); }
+#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 50; }
+
+@media (max-width: 720px) {
+  .wheel-wrap { grid-template-columns: minmax(0, 1fr); }
+  .wheel-stage { margin-inline: auto; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+</style>
+
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<main>
+  <header class="hero" id="hero">
+    <p class="mono pill" style="align-self:flex-start">A tiny website for one person</p>
+    <h1>Hey, <span class="name" id="herName">Sonia</span>.<br>I made you something.</h1>
+    <p class="lede">Poke everything. Tap anywhere around here for hearts.</p>
+    <div class="counter card" aria-live="off">
+      <p class="mono" id="sinceLabel">Together for</p>
+      <div class="tiles">
+        <div class="tile" style="--c:var(--yellow)"><b id="cDays">0</b><span>days</span></div>
+        <div class="tile" style="--c:var(--mint)"><b id="cHrs">0</b><span>hours</span></div>
+        <div class="tile" style="--c:var(--blue)"><b id="cMin">0</b><span>min</span></div>
+        <div class="tile" style="--c:var(--pink)"><b id="cSec">0</b><span>sec</span></div>
+      </div>
+      <p class="next-ann" id="nextAnn"></p>
+      <p class="next-ann" id="nextBday"></p>
+    </div>
+    <nav class="chips" aria-label="Jump to">
+      <a class="chip" href="#s-ask">The question</a>
+      <a class="chip" href="#s-date">Date wheel</a>
+      <a class="chip" href="#s-quiz">Quiz</a>
+      <a class="chip" href="#s-scratch">Scratch card</a>
+    </nav>
+  </header>
+
+  <section id="s-ask">
+    <div class="sec-head">
+      <span class="mono pill">One question</span>
+      <h2 id="askTitle">Will you keep being my girlfriend?</h2>
+      <p id="askSub">Take your time. Choose carefully.</p>
+    </div>
+    <div class="arena" id="arena">
+      <button class="btn" id="yes" type="button">Yes, obviously</button>
+      <button class="btn" id="no" type="button">No</button>
+    </div>
+    <div class="ask-done card" id="askDone" hidden>
+      <h3 id="askDoneText"></h3>
+      <button class="btn" id="askAgain" type="button">Ask me again</button>
+    </div>
+  </section>
+
+  <section id="s-date">
+    <div class="sec-head">
+      <span class="mono pill">Date night</span>
+      <h2>Can't decide? Spin.</h2>
+      <p>Tap the wheel or the button. Every idea works out and about.</p>
+    </div>
+    <div class="wheel-wrap">
+      <div class="wheel-stage">
+        <svg class="pointer" viewBox="0 0 40 44" aria-hidden="true"><path d="M20 42 L4 8 Q20 -2 36 8 Z" fill="var(--ink)"/><path d="M20 34 L10 12 Q20 6 30 12 Z" fill="var(--pink)"/></svg>
+        <canvas id="wheel" width="680" height="680" role="img" aria-label="Spinning wheel of date ideas"></canvas>
+      </div>
+      <div class="wheel-side">
+        <button class="btn" id="spin" type="button">Spin the wheel</button>
+        <div class="wheel-out card" id="wheelOut" aria-live="polite">
+          <p class="mono" style="color:var(--muted)">Our next date</p>
+          <h3 id="wheelPick">Give it a spin</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="s-quiz">
+    <div class="sec-head">
+      <span class="mono pill">Quiz</span>
+      <h2>How well do you know me?</h2>
+      <p>Six questions. Be honest, I'll know.</p>
+    </div>
+    <div class="quiz card" id="quiz"></div>
+  </section>
+
+  <section id="s-scratch">
+    <div class="sec-head">
+      <span class="mono pill">Scratch card</span>
+      <h2>One more thing</h2>
+      <p>Use your finger or your mouse. Scratch until something shows up.</p>
+    </div>
+    <div class="scratch-wrap">
+      <div class="scratch-box" id="scratchBox">
+        <h3 id="secretText"></h3>
+        <canvas id="scratch" aria-label="Scratch layer"></canvas>
+      </div>
+      <div class="scratch-actions">
+        <button class="btn alt" id="showMe" type="button">Just show me</button>
+        <button class="linklike" id="scratchAgain" type="button" hidden>Scratch again</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>Made with <b>♥</b> by <span id="yourName">me</span>. Every button on this page does something.</footer>
+</main>
+
+<script>
+/* ----- Edit these to make it yours ----- */
+const CONFIG = {
+  herName: "Sonia",
+  yourName: "me",
+  startDate: "2026-06-04", // YYYY-MM-DD, the day you got together (4 June 2026)
+  birthday: { month: 4, day: 7 }, // 7 April
+  question: "Will you keep being my girlfriend?",
+  yesMessage: "Correct answer. I was never going to accept any other.",
+  dates: ["Street food", "Cinema", "Cafe hop", "Park walk", "Arcade", "Sunset ride", "Karaoke", "Photo booth"], // all out and about, nothing from home
+  quiz: [
+    { q: "What's my comfort food at 2 a.m.?", options: ["Instant noodles", "Fried rice", "Ice cream"], answer: 0 },
+    { q: "Where would I move to tomorrow?", options: ["Bali", "Tokyo", "Bandung"], answer: 1 },
+    { q: "What's my favourite excuse for being late?", options: ["Traffic", "Lost my keys", "Five more minutes"], answer: 2 },
+    { q: "What do I do first when I wake up?", options: ["Check my phone", "Make coffee", "Text you"], answer: 2 },
+    { q: "What did I think when I first saw you?", options: ["Wow", "Who is that?", "Don't trip, don't trip"], answer: 2 },
+    { q: "What do I like most about you?", options: ["Your smile", "Your laugh", "Your kindness", "Your terrible jokes"], all: true } // plot twist: every option is right
+  ],
+  secret: "I LOVE YOU SONIA"
+};
+/* --------------------------------------- */
+
+const $ = (s, r = document) => r.querySelector(s);
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const palette = () => ["--pink", "--yellow", "--mint", "--blue"].map(cssVar);
+
+/* names */
+$("#herName").textContent = CONFIG.herName;
+$("#yourName").textContent = CONFIG.yourName;
+$("#askTitle").textContent = CONFIG.question;
+$("#secretText").textContent = CONFIG.secret;
+
+/* confetti */
+const cv = $("#confetti"), cx = cv.getContext("2d");
+let parts = [], running = false;
+function fitConfetti() { cv.width = innerWidth; cv.height = innerHeight; }
+addEventListener("resize", fitConfetti);
+fitConfetti();
+function burst(x, y, n = 110) {
+  if (reduce) n = 24;
+  const cols = palette();
+  for (let i = 0; i < n; i++) {
+    const a = Math.random() * Math.PI * 2, s = 4 + Math.random() * 9;
+    parts.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 6, w: 6 + Math.random() * 7, h: 4 + Math.random() * 6, rot: Math.random() * 6, vr: (Math.random() - 0.5) * 0.4, c: cols[i % cols.length], life: 1 });
+  }
+  if (!running) { running = true; requestAnimationFrame(stepConfetti); }
+}
+function stepConfetti() {
+  cx.clearRect(0, 0, cv.width, cv.height);
+  parts = parts.filter(p => p.life > 0 && p.y < cv.height + 40);
+  for (const p of parts) {
+    p.vy += 0.28; p.vx *= 0.99; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.life -= 0.006;
+    cx.save();
+    cx.translate(p.x, p.y);
+    cx.rotate(p.rot);
+    cx.globalAlpha = Math.max(p.life, 0);
+    cx.fillStyle = p.c;
+    cx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+    cx.restore();
+  }
+  if (parts.length) requestAnimationFrame(stepConfetti);
+  else { running = false; cx.clearRect(0, 0, cv.width, cv.height); }
+}
+function burstAt(el) {
+  const r = el.getBoundingClientRect();
+  burst(r.left + r.width / 2, r.top + r.height / 2);
+}
+
+/* hero hearts */
+$("#hero").addEventListener("pointerdown", e => {
+  if (reduce || e.target.closest("a, button")) return;
+  const hero = $("#hero"), r = hero.getBoundingClientRect();
+  const h = document.createElement("span");
+  h.className = "float-heart";
+  h.textContent = "♥";
+  h.style.left = (e.clientX - r.left) + "px";
+  h.style.top = (e.clientY - r.top) + "px";
+  h.style.color = palette()[Math.floor(Math.random() * 4)];
+  h.style.setProperty("--dx", (Math.random() * 80 - 40) + "px");
+  hero.appendChild(h);
+  h.addEventListener("animationend", () => h.remove());
+});
+
+/* days together */
+(function counter() {
+  const start = new Date(CONFIG.startDate + "T00:00:00");
+  const pretty = start.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+  $("#sinceLabel").textContent = "Together since " + pretty;
+  function tick() {
+    const now = new Date();
+    let ms = Math.max(now - start, 0);
+    $("#cDays").textContent = Math.floor(ms / 864e5).toLocaleString();
+    $("#cHrs").textContent = Math.floor(ms / 36e5) % 24;
+    $("#cMin").textContent = Math.floor(ms / 6e4) % 60;
+    $("#cSec").textContent = Math.floor(ms / 1e3) % 60;
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    let next = new Date(now.getFullYear(), start.getMonth(), start.getDate());
+    if (next < today) next = new Date(now.getFullYear() + 1, start.getMonth(), start.getDate());
+    const n = next.getFullYear() - start.getFullYear();
+    const d = Math.round((next - today) / 864e5);
+    $("#nextAnn").textContent = n < 1 ? "" : d === 0 ? "Today is our anniversary. Happy " + n + (n === 1 ? " year" : " years") + "." : "Anniversary number " + n + " is in " + d + (d === 1 ? " day." : " days.");
+    const b = CONFIG.birthday;
+    let bd = new Date(now.getFullYear(), b.month - 1, b.day);
+    if (bd < today) bd = new Date(now.getFullYear() + 1, b.month - 1, b.day);
+    const bl = Math.round((bd - today) / 864e5);
+    $("#nextBday").textContent = bl === 0 ? "Today is your birthday. Happy birthday, " + CONFIG.herName + "." : "Your birthday is in " + bl + (bl === 1 ? " day." : " days.");
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+
+/* the question */
+(function ask() {
+  const arena = $("#arena"), yes = $("#yes"), no = $("#no");
+  const labels = ["No", "Are you sure?", "Really sure?", "Think again", "Pretty please", "I'll buy snacks", "Last chance", "That's rude", "You can't catch me"];
+  let tries = 0;
+  function placeNo(random) {
+    const a = arena.getBoundingClientRect(), y = yes.getBoundingClientRect();
+    const w = no.offsetWidth, h = no.offsetHeight;
+    let x, t;
+    if (!random) {
+      x = (y.right - a.left) + 18; t = (a.height - h) / 2;
+      if (x + w > a.width - 8) { x = a.width - w - 8; t = a.height - h - 12; }
+    } else {
+      for (let i = 0; i < 40; i++) {
+        x = 8 + Math.random() * Math.max(a.width - w - 16, 1);
+        t = 8 + Math.random() * Math.max(a.height - h - 16, 1);
+        const L = a.left + x, T = a.top + t;
+        const hit = L < y.right + 14 && L + w > y.left - 14 && T < y.bottom + 14 && T + h > y.top - 14;
+        if (!hit) break;
+      }
+    }
+    no.style.left = x + "px";
+    no.style.top = t + "px";
+  }
+  function dodge(e) {
+    if (e) e.preventDefault();
+    tries++;
+    if (tries >= 11) {
+      no.hidden = true;
+      $("#askSub").textContent = "Only one button left. Funny how that works.";
+      return;
+    }
+    no.textContent = labels[Math.min(tries, labels.length - 1)];
+    arena.style.setProperty("--ys", Math.min(1 + tries * 0.07, 1.5));
+    arena.style.setProperty("--ns", Math.max(1 - tries * 0.05, 0.6));
+    requestAnimationFrame(() => placeNo(true));
+  }
+  ["pointerenter", "pointerdown", "focus", "click"].forEach(ev => no.addEventListener(ev, dodge));
+  yes.addEventListener("click", () => {
+    burstAt(yes);
+    setTimeout(() => burst(innerWidth * 0.25, innerHeight * 0.4, 60), 250);
+    setTimeout(() => burst(innerWidth * 0.75, innerHeight * 0.4, 60), 450);
+    arena.hidden = true;
+    $("#askDoneText").textContent = CONFIG.yesMessage;
+    $("#askDone").hidden = false;
+  });
+  $("#askAgain").addEventListener("click", () => {
+    tries = 0;
+    no.hidden = false;
+    no.textContent = labels[0];
+    arena.style.setProperty("--ys", 1);
+    arena.style.setProperty("--ns", 1);
+    $("#askSub").textContent = "Take your time. Choose carefully.";
+    $("#askDone").hidden = true;
+    arena.hidden = false;
+    placeNo(false);
+  });
+  document.fonts.ready.then(() => placeNo(false));
+  addEventListener("resize", () => { if (tries === 0 && !arena.hidden) placeNo(false); });
+  placeNo(false);
+})();
+
+/* date wheel */
+(function wheelGame() {
+  const cvs = $("#wheel"), ctx = cvs.getContext("2d");
+  const N = CONFIG.dates.length, seg = Math.PI * 2 / N, C = 340, R = 322;
+  let rot = 0, spinning = false;
+  function draw() {
+    const cols = palette(), ink = cssVar("--ink"), surf = cssVar("--surface"), onFill = cssVar("--on-fill"), pink = cssVar("--pink");
+    ctx.clearRect(0, 0, 680, 680);
+    ctx.lineJoin = "round";
+    for (let i = 0; i < N; i++) {
+      ctx.beginPath();
+      ctx.moveTo(C, C);
+      ctx.arc(C, C, R, rot + i * seg, rot + (i + 1) * seg);
+      ctx.closePath();
+      ctx.fillStyle = cols[i % 4];
+      ctx.fill();
+      ctx.lineWidth = 6;
+      ctx.strokeStyle = ink;
+      ctx.stroke();
+    }
+    ctx.fillStyle = onFill;
+    ctx.font = '800 32px Figtree, system-ui, sans-serif';
+    ctx.textAlign = "right";
+    ctx.textBaseline = "middle";
+    for (let i = 0; i < N; i++) {
+      ctx.save();
+      ctx.translate(C, C);
+      ctx.rotate(rot + (i + 0.5) * seg);
+      ctx.fillText(CONFIG.dates[i], R - 26, 0);
+      ctx.restore();
+    }
+    ctx.beginPath();
+    ctx.arc(C, C, 50, 0, Math.PI * 2);
+    ctx.fillStyle = surf;
+    ctx.fill();
+    ctx.lineWidth = 6;
+    ctx.strokeStyle = ink;
+    ctx.stroke();
+    ctx.fillStyle = pink;
+    ctx.font = '44px "Bagel Fat One", sans-serif';
+    ctx.textAlign = "center";
+    ctx.fillText("♥", C, C + 3);
+  }
+  const pointer = $(".pointer");
+  const idxAt = r => Math.min(Math.floor((((-Math.PI / 2 - r) % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2) / seg), N - 1);
+  let omega = 0, flap = 0, last = 0;
+  function setFlap() { pointer.style.transform = "translateX(-50%) rotate(" + flap + "rad)"; }
+  function finish() {
+    spinning = false;
+    omega = 0;
+    $("#spin").disabled = false;
+    $("#wheelPick").textContent = CONFIG.dates[idxAt(rot)];
+    burstAt($("#wheel"));
+  }
+  /* real momentum: the wheel is pushed once, then friction slows it down until it stops */
+  function loop(t) {
+    const dt = Math.min((t - last) / 1000, 0.05);
+    last = t;
+    const before = idxAt(rot);
+    omega = Math.max(omega - (0.6 * omega + 0.5) * dt, 0);
+    rot += omega * dt;
+    if (idxAt(rot) !== before) flap = -Math.min(0.2 + omega * 0.03, 0.55); /* a peg flicks the pointer */
+    flap *= Math.exp(-dt * 14);
+    setFlap();
+    draw();
+    if (omega > 0.03) requestAnimationFrame(loop);
+    else { flap = 0; setFlap(); finish(); }
+  }
+  function spin() {
+    if (spinning) return;
+    spinning = true;
+    $("#spin").disabled = true;
+    $("#wheelPick").textContent = "Spinning...";
+    omega = reduce ? 6 : 10 + Math.random() * 6;
+    last = performance.now();
+    requestAnimationFrame(loop);
+  }
+  $("#spin").addEventListener("click", spin);
+  $("#wheel").addEventListener("click", spin);
+  draw();
+  document.fonts.ready.then(draw);
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", draw);
+  new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+})();
+
+/* quiz */
+(function quiz() {
+  const el = $("#quiz"), Q = CONFIG.quiz;
+  const rightMsgs = ["Correct. I'm flattered.", "Yes! You pay attention.", "Right again. Suspicious.", "Correct, you menace."];
+  const wrongMsgs = ["Nope, but I forgive you.", "Wrong. I'm writing this down.", "Close. Not close, but close.", "Ouch. Bold guess though."];
+  let qi = 0, score = 0, answered = false;
+  const rand = a => a[Math.floor(Math.random() * a.length)];
+  function render() {
+    if (qi >= Q.length) return end();
+    const q = Q[qi];
+    answered = false;
+    el.innerHTML = `
+      <p class="mono">Question ${qi + 1} of ${Q.length}</p>
+      <h3>${q.q}</h3>
+      <div class="opts">${q.options.map((o, i) => `<button class="opt" type="button" data-i="${i}">${o}</button>`).join("")}</div>
+      <p class="feedback" id="fb" aria-live="polite"></p>
+      <div><button class="btn" id="next" type="button" hidden>Next</button></div>`;
+    el.querySelectorAll(".opt").forEach(b => b.addEventListener("click", () => pick(+b.dataset.i, q)));
+    $("#next", el).addEventListener("click", () => { qi++; render(); });
+  }
+  function pick(i, q) {
+    if (answered) return;
+    answered = true;
+    el.querySelectorAll(".opt").forEach((b, j) => {
+      b.disabled = true;
+      if (q.all || j === q.answer) b.classList.add("right");
+      else if (j === i) b.classList.add("wrong");
+    });
+    const ok = q.all || i === q.answer;
+    if (ok) score++;
+    $("#fb", el).textContent = q.all ? "Plot twist: it's all of them. Every single one." : ok ? rand(rightMsgs) : rand(wrongMsgs);
+    if (q.all) burstAt(el);
+    const nx = $("#next", el);
+    nx.hidden = false;
+    nx.textContent = qi === Q.length - 1 ? "See my score" : "Next";
+  }
+  function end() {
+    const ratio = score / Q.length;
+    const msg = ratio === 1 ? "Perfect score. You know me better than I know myself." : ratio >= 0.6 ? "Pretty good. I'd still let you date me." : ratio >= 0.4 ? "Not bad. We need more dinners to study." : "Zero effort detected. Homework: spend a whole day with me.";
+    el.innerHTML = `
+      <p class="mono">Final score</p>
+      <p class="score-big">${score} / ${Q.length}</p>
+      <h3>${msg}</h3>
+      <div><button class="btn alt" id="retry" type="button">Try again</button></div>`;
+    $("#retry", el).addEventListener("click", () => { qi = 0; score = 0; render(); });
+    if (ratio >= 0.6) burstAt(el);
+  }
+  render();
+})();
+
+/* scratch card */
+(function scratchCard() {
+  const box = $("#scratchBox"), sc = $("#scratch"), sx = sc.getContext("2d");
+  let drawing = false, done = false, last = null, moves = 0, width = 0;
+  function init() {
+    if (done) return;
+    const w = box.clientWidth, h = box.clientHeight;
+    width = w;
+    sc.width = w;
+    sc.height = h;
+    sx.globalCompositeOperation = "source-over";
+    const g = sx.createLinearGradient(0, 0, w, h);
+    g.addColorStop(0, cssVar("--yellow"));
+    g.addColorStop(0.5, cssVar("--mint"));
+    g.addColorStop(1, cssVar("--blue"));
+    sx.fillStyle = g;
+    sx.fillRect(0, 0, w, h);
+    const ink = cssVar("--on-fill");
+    sx.fillStyle = ink;
+    sx.globalAlpha = 0.14;
+    for (let y = 14; y < h; y += 28) for (let x = (y / 28) % 2 ? 14 : 0; x < w; x += 28) { sx.beginPath(); sx.arc(x, y, 3, 0, 7); sx.fill(); }
+    sx.globalAlpha = 1;
+    sx.fillStyle = ink;
+    sx.font = '32px "Bagel Fat One", sans-serif';
+    sx.textAlign = "center";
+    sx.textBaseline = "middle";
+    sx.fillText("SCRATCH HERE", w / 2, h / 2);
+  }
+  function pos(e) {
+    const r = sc.getBoundingClientRect();
+    return { x: (e.clientX - r.left) * (sc.width / r.width), y: (e.clientY - r.top) * (sc.height / r.height) };
+  }
+  function erase(e) {
+    const p = pos(e);
+    sx.globalCompositeOperation = "destination-out";
+    sx.lineCap = "round";
+    sx.lineWidth = 48;
+    if (last) { sx.beginPath(); sx.moveTo(last.x, last.y); sx.lineTo(p.x, p.y); sx.stroke(); }
+    else { sx.beginPath(); sx.arc(p.x, p.y, 24, 0, 7); sx.fill(); }
+    last = p;
+  }
+  function cleared() {
+    const d = sx.getImageData(0, 0, sc.width, sc.height).data;
+    let t = 0, n = 0;
+    for (let i = 3; i < d.length; i += 64) { n++; if (d[i] < 40) t++; }
+    return t / n;
+  }
+  function reveal() {
+    if (done) return;
+    done = true;
+    sc.classList.add("gone");
+    $("#scratchAgain").hidden = false;
+    $("#showMe").hidden = true;
+    burstAt(box);
+  }
+  sc.addEventListener("pointerdown", e => { if (done) return; drawing = true; last = null; sc.setPointerCapture(e.pointerId); erase(e); });
+  sc.addEventListener("pointermove", e => { if (!drawing || done) return; erase(e); if (++moves % 12 === 0 && cleared() > 0.5) reveal(); });
+  const stop = () => { drawing = false; last = null; if (!done && cleared() > 0.5) reveal(); };
+  sc.addEventListener("pointerup", stop);
+  sc.addEventListener("pointercancel", stop);
+  $("#showMe").addEventListener("click", reveal);
+  $("#scratchAgain").addEventListener("click", () => {
+    done = false;
+    sc.classList.remove("gone");
+    $("#scratchAgain").hidden = true;
+    $("#showMe").hidden = false;
+    init();
+  });
+  document.fonts.ready.then(init);
+  init();
+  addEventListener("resize", () => { if (!done && box.clientWidth !== width) init(); });
+})();
+</script>
